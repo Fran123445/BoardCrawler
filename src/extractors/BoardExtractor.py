@@ -1,11 +1,10 @@
 import requests
 
-class BoardFetcher:
+class BoardExtractor:
 
-    def fetchBoardNames():
+    def extractBoards(self):
         boards_response = requests.get('https://a.4cdn.org/boards.json')
         boards_json = boards_response.json()
-        print(boards_json)
+        board_list = boards_json['boards']
 
-
-BoardFetcher.fetchBoardNames()
+        return board_list
