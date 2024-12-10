@@ -12,13 +12,12 @@ class Thread:
     board_id: int
     thread_number: int
     title: str
-    creation_time: str # DateTime de Python != DateTime de SQL
 
 @dataclass
 class Reply:
     board_id: int
     reply_id: int
-    creation_time: str
+    creation_time: str # DateTime de Python != DateTime de SQL
     content: str
     filename: Optional[str] = None
     anon_name: Optional[str] = None

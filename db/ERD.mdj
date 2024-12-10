@@ -251,6 +251,7 @@
 											"model": {
 												"$ref": "AAAAAAGTn4fGZ7mAZ34="
 											},
+											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 701,
@@ -274,6 +275,23 @@
 											"top": 632,
 											"width": 238.89892578125,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGTrp6j1rH1PfM=",
+											"_parent": {
+												"$ref": "AAAAAAGTn3PlorlGZyo="
+											},
+											"model": {
+												"$ref": "AAAAAAGTrp6jzLHyphg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 701,
+											"top": 617,
+											"width": 238.89892578125,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
@@ -281,7 +299,7 @@
 									"left": 696,
 									"top": 567,
 									"width": 248.89892578125,
-									"height": 68
+									"height": 53
 								}
 							],
 							"font": "Arial;13;0",
@@ -289,7 +307,7 @@
 							"left": 696,
 							"top": 544,
 							"width": 248.89892578125,
-							"height": 91,
+							"height": 76,
 							"autoResize": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGTn3PlorlFZuo="
@@ -1156,7 +1174,7 @@
 								"reference": {
 									"$ref": "AAAAAAGTn4RSN7ltAhY="
 								},
-								"cardinality": "0..*"
+								"cardinality": "1..*"
 							}
 						}
 					],
@@ -1182,7 +1200,8 @@
 							"name": "thread_number",
 							"type": "decimal",
 							"length": "18",
-							"primaryKey": true
+							"primaryKey": true,
+							"foreignKey": true
 						},
 						{
 							"_type": "ERDColumn",
@@ -1219,6 +1238,17 @@
 								"$ref": "AAAAAAGTn3PlorlCD1I="
 							},
 							"name": "Column2"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGTrp6jzLHyphg=",
+							"_parent": {
+								"$ref": "AAAAAAGTn3PlorlCD1I="
+							},
+							"name": "original_post",
+							"type": "decimal",
+							"length": "18",
+							"foreignKey": true
 						}
 					]
 				},
@@ -1370,8 +1400,7 @@
 							},
 							"name": "replies_mentioned",
 							"type": "decimal",
-							"length": "18",
-							"foreignKey": true
+							"length": "18"
 						},
 						{
 							"_type": "ERDColumn",
@@ -1495,6 +1524,7 @@
 							"name": "mentioned_reply",
 							"type": "decimal",
 							"length": "18",
+							"primaryKey": true,
 							"foreignKey": true
 						}
 					]

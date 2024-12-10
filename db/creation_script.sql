@@ -8,33 +8,33 @@ CREATE TABLE Board (
     title NVARCHAR(50) NOT NULL
 )
 
-CREATE TABLE Thread (
-    board_id DECIMAL(4),
-    thread_number DECIMAL(18),
-    title NVARCHAR(256),
-    timestamp DATETIME NOT NULL,
-    PRIMARY KEY (board_id, thread_number),
-    FOREIGN KEY (board_id) REFERENCES Board(id)
-)
-
 CREATE TABLE Countries (
     country_id DECIMAL(4) PRIMARY KEY,
     country_name NVARCHAR(256) NOT NULL
 )
 
 CREATE TABLE Reply (
-    board_id DECIMAL(4) NOT NULL,
-    reply_id DECIMAL(18) NOT NULL,
+    board_id DECIMAL(4),
+    reply_id DECIMAL(18),
     anon_name NVARCHAR(256),
     anon_id NVARCHAR(16),
     anon_country DECIMAL(4),
-    timestamp DATETIME NOT NULL,
+    creation_time DATETIME NOT NULL,
     filename NVARCHAR(256),
     replies_mentioned DECIMAL(18),
     content NVARCHAR(MAX),
     PRIMARY KEY (board_id, reply_id),
     FOREIGN KEY (board_id) REFERENCES Board(id),
     FOREIGN KEY (anon_country) REFERENCES Countries(country_id)
+)
+
+CREATE TABLE Thread (
+    board_id DECIMAL(4),
+    thread_number DECIMAL(18),
+    title NVARCHAR(256),
+    PRIMARY KEY (board_id, thread_number),
+    FOREIGN KEY (board_id) REFERENCES Board(id),
+    FOREIGN KEY (board_id, thread_number) REFERENCES Reply(board_id, reply_id)
 )
 
 CREATE TABLE ReplyMentions (
