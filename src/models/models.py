@@ -1,37 +1,25 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
 @dataclass
 class Board:
     board_name: str
     title: str
-    id: Optional[int] = None
-
-@dataclass
-class Thread:
-    board_id: int
-    thread_number: int
-    title: str
 
 @dataclass
 class Reply:
-    board_id: int
     reply_id: int
-    creation_time: str # DateTime de Python != DateTime de SQL
+    creation_time: str # DateTime on Python != DateTime on SQL
     content: str
+    replies_metioned: Optional[List[int]] = None
     filename: Optional[str] = None
     anon_name: Optional[str] = None
     anon_id: Optional[str] = None
-    anon_country: Optional[int] = None
-    replies_mentioned: Optional[int] = None
+    anon_country: Optional[str] = None
 
 @dataclass
-class Countries:
-    country_id: int
-    country_name: str
-
-@dataclass
-class ReplyMentions:
-    board_id: int
-    reply_id: int
-    mentioned_reply: int
+class Thread:
+    board_name: str
+    thread_number: int
+    title: str
+    replies: List[Reply]
