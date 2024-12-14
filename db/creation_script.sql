@@ -75,3 +75,11 @@ BEGIN
 
 	RETURN 1 -- the board is already in the db
 END
+
+CREATE PROCEDURE uspInsertThread(@board_name NVARCHAR(10), @thread_number DECIMAL(18), @title NVARCHAR(256)) AS
+BEGIN
+	DECLARE @board_id DECIMAL(4)
+	SET @board_id = dbo.findBoardId(@board_name)
+
+	INSERT INTO Thread (board_id, thread_number, title) VALUES (@board_id, @thread_number, @title)
+END
