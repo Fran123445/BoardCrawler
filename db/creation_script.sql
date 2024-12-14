@@ -10,7 +10,7 @@ CREATE TABLE Board (
     title NVARCHAR(50) NOT NULL
 )
 
-CREATE TABLE Countries (
+CREATE TABLE Country (
     country_id DECIMAL(4) PRIMARY KEY,
     country_name NVARCHAR(256) NOT NULL
 )
@@ -38,10 +38,10 @@ CREATE TABLE Reply (
     PRIMARY KEY (board_id, reply_id),
     FOREIGN KEY (board_id) REFERENCES Board(id),
 	FOREIGN KEY (board_id, thread_number) REFERENCES Thread(board_id, thread_number),
-    FOREIGN KEY (anon_country) REFERENCES Countries(country_id)
+    FOREIGN KEY (anon_country) REFERENCES Country(country_id)
 )
 
-CREATE TABLE ReplyMentions (
+CREATE TABLE ReplyMention (
     board_id DECIMAL(4),
     reply_id DECIMAL(18),
     mentioned_reply DECIMAL(18),
@@ -76,6 +76,7 @@ BEGIN
 	RETURN 1 -- the board is already in the db
 END
 
+-- Thread insertion
 CREATE PROCEDURE uspInsertThread(@board_name NVARCHAR(10), @thread_number DECIMAL(18), @title NVARCHAR(256)) AS
 BEGIN
 	DECLARE @board_id DECIMAL(4)

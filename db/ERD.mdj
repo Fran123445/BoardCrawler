@@ -555,7 +555,7 @@
 									"top": 541,
 									"width": 222.18798828125,
 									"height": 13,
-									"text": "Countries"
+									"text": "Country"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -916,7 +916,7 @@
 									"top": 637,
 									"width": 244.55712890625,
 									"height": 13,
-									"text": "ReplyMentions"
+									"text": "ReplyMention"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -1446,7 +1446,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGTn27RJrkT4w8="
 					},
-					"name": "Countries",
+					"name": "Country",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
@@ -1515,7 +1515,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGTn27RJrkT4w8="
 					},
-					"name": "ReplyMentions",
+					"name": "ReplyMention",
 					"columns": [
 						{
 							"_type": "ERDColumn",
