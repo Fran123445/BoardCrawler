@@ -493,6 +493,22 @@
 											"top": 660,
 											"width": 259.13525390625,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGTxp7Edn/9QcI=",
+											"_parent": {
+												"$ref": "AAAAAAGTn4RSN7lxHo0="
+											},
+											"model": {
+												"$ref": "AAAAAAGTxp7Ean/6W6s="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 1005,
+											"top": 675,
+											"width": 259.13525390625,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
@@ -500,7 +516,7 @@
 									"left": 1000,
 									"top": 535,
 									"width": 269.13525390625,
-									"height": 143
+									"height": 158
 								}
 							],
 							"font": "Arial;13;0",
@@ -508,7 +524,7 @@
 							"left": 1000,
 							"top": 512,
 							"width": 269.13525390625,
-							"height": 166,
+							"height": 181,
 							"autoResize": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGTn4RSN7lwtDQ="
@@ -1200,8 +1216,7 @@
 							"name": "thread_number",
 							"type": "decimal",
 							"length": "18",
-							"primaryKey": true,
-							"foreignKey": true
+							"primaryKey": true
 						},
 						{
 							"_type": "ERDColumn",
@@ -1411,6 +1426,17 @@
 							"name": "content",
 							"type": "nvarchar",
 							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGTxp7Ean/6W6s=",
+							"_parent": {
+								"$ref": "AAAAAAGTn4RSN7ltAhY="
+							},
+							"name": "thread_number",
+							"type": "decimal",
+							"length": "18",
+							"foreignKey": true
 						}
 					]
 				},

@@ -15,6 +15,15 @@ CREATE TABLE Countries (
     country_name NVARCHAR(256) NOT NULL
 )
 
+
+CREATE TABLE Thread (
+    board_id DECIMAL(4),
+    thread_number DECIMAL(18),
+    title NVARCHAR(256),
+    PRIMARY KEY (board_id, thread_number),
+    FOREIGN KEY (board_id) REFERENCES Board(id),
+)
+
 CREATE TABLE Reply (
     board_id DECIMAL(4),
     reply_id DECIMAL(18),
@@ -25,18 +34,11 @@ CREATE TABLE Reply (
     filename NVARCHAR(256),
     replies_mentioned DECIMAL(18),
     content NVARCHAR(MAX),
+	thread_number DECIMAL(18) NOT NULL,
     PRIMARY KEY (board_id, reply_id),
     FOREIGN KEY (board_id) REFERENCES Board(id),
+	FOREIGN KEY (board_id, thread_number) REFERENCES Thread(board_id, thread_number),
     FOREIGN KEY (anon_country) REFERENCES Countries(country_id)
-)
-
-CREATE TABLE Thread (
-    board_id DECIMAL(4),
-    thread_number DECIMAL(18),
-    title NVARCHAR(256),
-    PRIMARY KEY (board_id, thread_number),
-    FOREIGN KEY (board_id) REFERENCES Board(id),
-    FOREIGN KEY (board_id, thread_number) REFERENCES Reply(board_id, reply_id)
 )
 
 CREATE TABLE ReplyMentions (
@@ -72,12 +74,4 @@ BEGIN
 	END
 
 	RETURN 1 -- the board is already in the db
-END
-
-CREATE PROCEDURE uspInsertThread(@board_name NVARCHAR(10), @thread_number DECIMAL(18), @title NVARCHAR(256)) AS
-BEGIN
-	DECLARE @board_id DECIMAL(4)
-	SET @board_id = dbo.findBoardId(@board_name)
-
-	INSERT INTO Thread (board_id, thread_number, title) VALUES (@board_id, @thread_number, @title)
 END
