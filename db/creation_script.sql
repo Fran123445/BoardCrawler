@@ -11,7 +11,7 @@ CREATE TABLE Board (
 )
 
 CREATE TABLE Country (
-    country_id DECIMAL(4) PRIMARY KEY,
+    country_id DECIMAL(4) PRIMARY KEY IDENTITY(1,1),
     country_name NVARCHAR(256) NOT NULL
 )
 
@@ -83,4 +83,21 @@ BEGIN
 	SET @board_id = dbo.findBoardId(@board_name)
 
 	INSERT INTO Thread (board_id, thread_number, title) VALUES (@board_id, @thread_number, @title)
+END
+
+
+-- Insert country
+
+CREATE PROCEDURE uspInsertCountry(@country_name NVARCHAR(256)) 
+AS
+BEGIN
+	
+	DECLARE @country_id DECIMAL(4)
+	SET @country_id = (SELECT c.country_id FROM Country c WHERE c.country_name = @country_name)
+
+	IF @country_id IS NULL
+		INSERT INTO Country (country_name) VALUES (@country_name)
+		SET @country_id = SCOPE_IDENTITY()
+	
+	RETURN @country_id
 END
