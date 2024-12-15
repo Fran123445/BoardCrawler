@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from models.models import Reply
 
-class ReplyTransformer:
+class ThreadTransformer:
 
     def _get_reply_id(self, container):
         return int(container.find('div', class_='post')['id'][1:])
@@ -44,7 +44,7 @@ class ReplyTransformer:
         flag_span = container.find('span', class_='flag')
         return flag_span['title'] if flag_span else None
 
-    def transformReplies(self, thread_html):
+    def transformThread(self, thread_html):
         soup = BeautifulSoup(thread_html, 'html.parser')
         replies = []
 
