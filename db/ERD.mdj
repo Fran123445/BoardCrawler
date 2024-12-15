@@ -915,9 +915,9 @@
 									"parentStyle": true,
 									"left": 1344,
 									"top": 637,
-									"width": 244.55712890625,
+									"width": 263.33984375,
 									"height": 13,
-									"text": "ReplyMention"
+									"text": "MentionedReply"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -942,7 +942,7 @@
 											"parentStyle": true,
 											"left": 1349,
 											"top": 660,
-											"width": 234.55712890625,
+											"width": 253.33984375,
 											"height": 13
 										},
 										{
@@ -958,7 +958,7 @@
 											"parentStyle": true,
 											"left": 1349,
 											"top": 675,
-											"width": 234.55712890625,
+											"width": 253.33984375,
 											"height": 13
 										},
 										{
@@ -974,7 +974,7 @@
 											"parentStyle": true,
 											"left": 1349,
 											"top": 690,
-											"width": 234.55712890625,
+											"width": 253.33984375,
 											"height": 13
 										}
 									],
@@ -982,7 +982,7 @@
 									"parentStyle": true,
 									"left": 1344,
 									"top": 655,
-									"width": 244.55712890625,
+									"width": 263.33984375,
 									"height": 53
 								}
 							],
@@ -990,7 +990,7 @@
 							"parentStyle": false,
 							"left": 1344,
 							"top": 632,
-							"width": 244.55712890625,
+							"width": 263.33984375,
 							"height": 76,
 							"autoResize": true,
 							"nameLabel": {
@@ -1516,7 +1516,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGTn27RJrkT4w8="
 					},
-					"name": "ReplyMention",
+					"name": "MentionedReply",
 					"columns": [
 						{
 							"_type": "ERDColumn",
@@ -1548,7 +1548,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGTn6i867pTK4I="
 							},
-							"name": "mentioned_reply",
+							"name": "mentioned_reply_id",
 							"type": "decimal",
 							"length": "18",
 							"primaryKey": true,

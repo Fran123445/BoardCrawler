@@ -40,13 +40,13 @@ CREATE TABLE Reply (
     FOREIGN KEY (anon_country) REFERENCES Country(country_id)
 )
 
-CREATE TABLE ReplyMention (
+CREATE TABLE MentionedReply (
     board_id DECIMAL(4),
     reply_id DECIMAL(18),
-    mentioned_reply DECIMAL(18),
-    PRIMARY KEY (board_id, reply_id, mentioned_reply),
+    mentioned_reply_id DECIMAL(18),
+    PRIMARY KEY (board_id, reply_id, mentioned_reply_id),
     FOREIGN KEY (board_id, reply_id) REFERENCES Reply(board_id, reply_id),
-    FOREIGN KEY (board_id, mentioned_reply) REFERENCES Reply(board_id, reply_id)
+    FOREIGN KEY (board_id, mentioned_reply_id) REFERENCES Reply(board_id, reply_id)
 )
 GO
 
@@ -141,9 +141,9 @@ BEGIN
 	)
 END
 
--- ReplyMention insertion
-CREATE PROCEDURE uspInsertReplyMention(@board_id DECIMAL(4), @reply_id DECIMAL(18), @mentioned_reply DECIMAL(18))
+-- MentionedReply insertion
+CREATE PROCEDURE uspInsertMentionedReply(@board_id DECIMAL(4), @reply_id DECIMAL(18), @mentioned_reply_id DECIMAL(18))
 AS
 BEGIN
-	INSERT INTO ReplyMention (board_id, reply_id, mentioned_reply) VALUES (@board_id, @reply_id, @mentioned_reply)
+	INSERT INTO MentionedReply (board_id, reply_id, mentioned_reply_id) VALUES (@board_id, @reply_id, @mentioned_reply_id)
 END
