@@ -1,8 +1,9 @@
 from models.models import Thread, Board
+from typing import List
 
-class ThreadTransformer:
+class CatalogTransformer:
 
-    def transformThreads(self, board: Board, catalog):
+    def transformCatalog(self, board: Board, catalog: List[Board]):
         thread_list = []
 
         for page in catalog:

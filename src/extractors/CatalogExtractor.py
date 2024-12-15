@@ -2,10 +2,10 @@ import requests
 from models.models import Board
 
 
-class ThreadExtractor:
+class CatalogExtractor:
     """Extracts all threads from a given board"""
 
-    def extractThreads(self, board: Board):
+    def extractCatalog(self, board: Board):
         board_name = board.board_name
 
         catalog_response = requests.get(f"https://a.4cdn.org/{board_name}/catalog.json")
