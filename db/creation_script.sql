@@ -74,6 +74,7 @@ BEGIN
 
 	RETURN 1 -- the board is already in the db
 END
+GO
 
 -- Thread insertion
 CREATE PROCEDURE uspInsertThread(@board_name NVARCHAR(10), @thread_number DECIMAL(18), @title NVARCHAR(256)) AS
@@ -83,7 +84,7 @@ BEGIN
 
 	INSERT INTO Thread (board_id, thread_number, title) VALUES (@board_id, @thread_number, @title)
 END
-
+GO
 
 -- Country insertion
 CREATE PROCEDURE uspInsertCountry(@country_name NVARCHAR(256)) 
@@ -99,6 +100,7 @@ BEGIN
 	
 	RETURN @country_id
 END
+GO
 
 -- Reply insertion
 CREATE PROCEDURE uspInsertReply(
@@ -140,6 +142,7 @@ BEGIN
 			@thread_number
 	)
 END
+GO
 
 -- MentionedReply insertion
 CREATE PROCEDURE uspInsertMentionedReply(@board_id DECIMAL(4), @reply_id DECIMAL(18), @mentioned_reply_id DECIMAL(18))
@@ -147,3 +150,4 @@ AS
 BEGIN
 	INSERT INTO MentionedReply (board_id, reply_id, mentioned_reply_id) VALUES (@board_id, @reply_id, @mentioned_reply_id)
 END
+GO
