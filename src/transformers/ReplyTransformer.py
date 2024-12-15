@@ -51,7 +51,7 @@ class ReplyTransformer:
         post_containers = soup.find_all('div', class_='postContainer')
         for container in post_containers:
             reply_id = self._get_reply_id(container)
-            creation_time = self._get_creation_time(container)
+            creation_time = int(self._get_creation_time(container))
             filename = self._get_filename(container)
             anon_name = self._get_anon_name(container)
             anon_id = self._get_anon_id(container)
