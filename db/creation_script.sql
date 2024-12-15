@@ -77,11 +77,8 @@ END
 GO
 
 -- Thread insertion
-CREATE PROCEDURE uspInsertThread(@board_name NVARCHAR(10), @thread_number DECIMAL(18), @title NVARCHAR(256)) AS
+CREATE PROCEDURE uspInsertThread(@board_id DECIMAL(4), @thread_number DECIMAL(18), @title NVARCHAR(256)) AS
 BEGIN
-	DECLARE @board_id DECIMAL(4)
-	SET @board_id = dbo.findBoardId(@board_name)
-
 	INSERT INTO Thread (board_id, thread_number, title) VALUES (@board_id, @thread_number, @title)
 END
 GO
@@ -118,7 +115,11 @@ BEGIN
 	DECLARE @date DATETIME
 
 	SET @date = DATEADD(S, @timestamp, '1970-01-01')
-	EXEC @country_id = dbo.uspInsertCountry @anon_country_name
+
+	IF @anon_country_name IS NOT NULL
+	BEGIN
+		EXEC @country_id = dbo.uspInsertCountry @anon_country_name
+	END
 
 	INSERT INTO Reply (
 			board_id, 
