@@ -85,8 +85,7 @@ BEGIN
 END
 
 
--- Insert country
-
+-- Country insertion
 CREATE PROCEDURE uspInsertCountry(@country_name NVARCHAR(256)) 
 AS
 BEGIN
@@ -99,4 +98,52 @@ BEGIN
 		SET @country_id = SCOPE_IDENTITY()
 	
 	RETURN @country_id
+END
+
+-- Reply insertion
+CREATE PROCEDURE uspInsertReply(
+				@board_id DECIMAL(4),
+				@reply_id DECIMAL(18),
+				@anon_name NVARCHAR(256),
+				@anon_id NVARCHAR(16),
+				@anon_country_name NVARCHAR(256),
+				@timestamp INT,
+				@filename NVARCHAR(256),
+				@content NVARCHAR(MAX),
+				@thread_number DECIMAL(18)) AS
+BEGIN
+	DECLARE @country_id DECIMAL(4)
+	DECLARE @date DATETIME
+
+	SET @date = DATEADD(S, @timestamp, '1970-01-01')
+	EXEC @country_id = dbo.uspInsertCountry @anon_country_name
+
+	INSERT INTO Reply (
+			board_id, 
+			reply_id, 
+			anon_name, 
+			anon_id, 
+			anon_country, 
+			creation_time, 
+			filename, 
+			content, 
+			thread_number
+	) VALUES (
+			@board_id,
+			@reply_id,
+			@anon_name,
+			@anon_id,
+			@anon_country_name,
+			@date,
+			@filename,
+			@content,
+			@thread_number
+	)
+END
+
+-- ReplyMention insertion
+CREATE PROCEDURE uspInsertReplyMention(@board_id DECIMAL(4), @reply_id DECIMAL(18), @mentioned_reply DECIMAL(18))
+AS
+BEGIN
+	INSERT INTO ReplyMention (board_id, reply_id, mentioned_reply) VALUES (@board_id, @reply_id, @mentioned_reply)
 END
