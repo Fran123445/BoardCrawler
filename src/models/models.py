@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, List
 
 @dataclass
@@ -9,7 +9,7 @@ class Board:
 @dataclass
 class Reply:
     reply_id: int
-    creation_time: str # DateTime on Python != DateTime on SQL
+    creation_time: int # timestamp
     content: str
     replies_metioned: Optional[List[int]] = None
     filename: Optional[str] = None
@@ -21,5 +21,5 @@ class Reply:
 class Thread:
     board_name: str
     thread_number: int
-    title: str
-    replies: List[Reply]
+    title: Optional[str] = None
+    replies: List[Reply] = field(default_factory=list)
