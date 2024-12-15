@@ -32,7 +32,6 @@ CREATE TABLE Reply (
     anon_country DECIMAL(4),
     creation_time DATETIME NOT NULL,
     filename NVARCHAR(256),
-    replies_mentioned DECIMAL(18),
     content NVARCHAR(MAX),
 	thread_number DECIMAL(18) NOT NULL,
     PRIMARY KEY (board_id, reply_id),
