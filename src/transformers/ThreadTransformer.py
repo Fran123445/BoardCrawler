@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from models.models import Reply
+from models.models import Reply, Thread
 
 class ThreadTransformer:
 
@@ -11,14 +11,22 @@ class ThreadTransformer:
         return date_time_span['data-utc']
 
     def _get_content(self, container):
-        return [post.get_text(separator='\n') for post in container.find_all('blockquote', class_='postMessage')]
+        post = container.find('blockquote', class_='postMessage')
+        return post.get_text(separator='\n')
 
     def _get_replies_mentions(self, container):
         replies_metioned = []
 
-        for a_tag in container.find_all('a', class_='quotelink'):
-            # Extract the text content (e.g., >>103467046) and remove the ">>"
-            reply = a_tag.text[2:]
+        for a_tag in container.find_all('a', class_='quotelink', href=True):
+            # Extract the reply number from the href and remove the #p
+            ref = a_tag['href']
+
+            if not ref.startswith('#p'):
+                # Only consider references inside the same thread
+                continue
+
+            reply = ref[2:]
+
             replies_metioned.append(reply)
 
         return replies_metioned
@@ -44,9 +52,8 @@ class ThreadTransformer:
         flag_span = container.find('span', class_='flag')
         return flag_span['title'] if flag_span else None
 
-    def transformThread(self, thread_html):
+    def transformThread(self, thread: Thread, thread_html):
         soup = BeautifulSoup(thread_html, 'html.parser')
-        replies = []
 
         post_containers = soup.find_all('div', class_='postContainer')
         for container in post_containers:
@@ -60,7 +67,7 @@ class ThreadTransformer:
             content = self._get_content(container)
             replies_metioned = self._get_replies_mentions(container)
 
-            replies.append(Reply(reply_id=reply_id,
+            thread.replies.append(Reply(reply_id=reply_id,
                                  creation_time=creation_time,
                                  content=content,
                                  replies_metioned=replies_metioned,
@@ -68,5 +75,3 @@ class ThreadTransformer:
                                  anon_name=anon_name,
                                  anon_id=anon_id,
                                  anon_country=anon_country))
-
-        return replies
