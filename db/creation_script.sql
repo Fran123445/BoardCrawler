@@ -161,3 +161,36 @@ BEGIN
 	INSERT INTO MentionedReply (board_id, reply_id, mentioned_reply_id) VALUES (@board_id, @reply_id, @mentioned_reply_id)
 END
 GO
+
+-- Attached file insertion
+CREATE PROCEDURE uspInsertAttachedFile(
+			@board_id DECIMAL(4),
+			@reply_id DECIMAL(18),
+			@filename NVARCHAR(256),
+			@fileTimestamp decimal(18),
+			@extension NVARCHAR(6),
+			@size DECIMAL(18),
+			@height DECIMAL(8),
+			@width DECIMAL(8))
+AS
+BEGIN
+	INSERT INTO AttachedFile (
+			board_id,
+			reply_id,
+			filename,
+			fileTimestamp,
+			extension,
+			size,
+			height,
+			width)
+	VALUES (
+			@board_id,
+			@reply_id,
+			@filename,
+			@fileTimestamp,
+			@extension,
+			@size,
+			@height,
+			@width
+	)
+END
