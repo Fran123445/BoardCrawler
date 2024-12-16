@@ -16,7 +16,7 @@ class FileTransfomer:
         """
 
     def _get_filename_and_ext(self, container):
-        filename_with_ext = container.text
+        filename_with_ext = container['title'] if container.get('title') else container.text
         split = filename_with_ext.split('.')
         filename = split[0]
         extension = split[1]
