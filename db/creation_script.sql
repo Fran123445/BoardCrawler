@@ -17,13 +17,14 @@ CREATE TABLE Country (
 
 CREATE TABLE AttachedFile (
 	board_id DECIMAL(4),
-	file_id DECIMAL(18),
+	reply_id DECIMAL(18),
 	filename NVARCHAR(256),
+	fileTimestamp decimal(18),
 	extension NVARCHAR(6),
 	size DECIMAL(18),
 	height DECIMAL(8),
 	width DECIMAL(8),
-	PRIMARY KEY (board_id, file_id),
+	PRIMARY KEY (board_id, reply_id),
 	FOREIGN KEY (board_id) REFERENCES Board(id)
 )
 
@@ -43,14 +44,12 @@ CREATE TABLE Reply (
     anon_id NVARCHAR(16),
     anon_country DECIMAL(4),
     creation_time DATETIME NOT NULL,
-    file_id DECIMAL(18),
     content NVARCHAR(MAX),
 	thread_number DECIMAL(18) NOT NULL,
     PRIMARY KEY (board_id, reply_id),
     FOREIGN KEY (board_id) REFERENCES Board(id),
 	FOREIGN KEY (board_id, thread_number) REFERENCES Thread(board_id, thread_number),
     FOREIGN KEY (anon_country) REFERENCES Country(country_id),
-	FOREIGN KEY (board_id, file_id) REFERENCES AttachedFile(board_id, file_id)
 )
 
 CREATE TABLE MentionedReply (
@@ -120,7 +119,6 @@ CREATE PROCEDURE uspInsertReply(
 				@anon_id NVARCHAR(16),
 				@anon_country_name NVARCHAR(256),
 				@timestamp INT,
-				@file_id DECIMAL(18),
 				@content NVARCHAR(MAX),
 				@thread_number DECIMAL(18)) AS
 BEGIN
@@ -141,7 +139,6 @@ BEGIN
 			anon_id, 
 			anon_country, 
 			creation_time, 
-			file_id, 
 			content, 
 			thread_number
 	) VALUES (
@@ -151,7 +148,6 @@ BEGIN
 			@anon_id,
 			@anon_country_name,
 			@date,
-			@file_id,
 			@content,
 			@thread_number
 	)
