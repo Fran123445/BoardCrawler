@@ -22,8 +22,8 @@ CREATE TABLE AttachedFile (
 	fileTimestamp decimal(18),
 	extension NVARCHAR(6),
 	size DECIMAL(18),
-	height DECIMAL(8),
 	width DECIMAL(8),
+	height DECIMAL(8),
 	PRIMARY KEY (board_id, reply_id),
 	FOREIGN KEY (board_id) REFERENCES Board(id)
 )
@@ -170,8 +170,8 @@ CREATE PROCEDURE uspInsertAttachedFile(
 			@fileTimestamp decimal(18),
 			@extension NVARCHAR(6),
 			@size DECIMAL(18),
-			@height DECIMAL(8),
-			@width DECIMAL(8))
+			@width DECIMAL(8),
+			@height DECIMAL(8))
 AS
 BEGIN
 	INSERT INTO AttachedFile (
@@ -181,8 +181,8 @@ BEGIN
 			fileTimestamp,
 			extension,
 			size,
-			height,
-			width)
+			width,
+			height)
 	VALUES (
 			@board_id,
 			@reply_id,
@@ -190,7 +190,7 @@ BEGIN
 			@fileTimestamp,
 			@extension,
 			@size,
-			@height,
-			@width
+			@width,
+			@height
 	)
 END
