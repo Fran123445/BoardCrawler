@@ -55,7 +55,7 @@ class ThreadLoader(Loader):
         cursor.executemany('EXEC uspInsertMentionedReply ?,?,?', mentioned_reply_tuples)
         cursor.executemany('EXEC uspInsertAttachedFile ?,?,?,?,?,?,?,?', attached_file_tuples)
 
-    def bulkLoad(self, data_list: list):
+    def bulk_load(self, data_list: list):
         cursor = self.conn.cursor()
         cursor.execute('SELECT dbo.findBoardId(?)', (data_list[0].board_name))
         board_id = cursor.fetchone()[0]
