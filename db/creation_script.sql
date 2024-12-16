@@ -19,6 +19,7 @@ CREATE TABLE AttachedFile (
 	board_id DECIMAL(4),
 	file_id DECIMAL(18),
 	filename NVARCHAR(256),
+	extension NVARCHAR(6),
 	size DECIMAL(18),
 	height DECIMAL(8),
 	width DECIMAL(8),

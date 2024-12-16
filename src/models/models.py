@@ -7,9 +7,10 @@ class Board:
     title: str
 
 @dataclass
-class File:
+class AttachedFile:
     file_id: int
     filename: str
+    extension: str
     size: int
     height: int
     width: int
@@ -20,7 +21,7 @@ class Reply:
     creation_time: int # timestamp
     content: str
     replies_metioned: Optional[List[int]] = None
-    filename: Optional[str] = None
+    file: Optional[AttachedFile] = None
     anon_name: Optional[str] = None
     anon_id: Optional[str] = None
     anon_country: Optional[str] = None
