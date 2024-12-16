@@ -5,6 +5,7 @@ USE BoardCrawler
 DROP TABLE MentionedReply
 DROP TABLE Reply
 DROP TABLE Thread
+DROP TABLE AttachedFile
 DROP TABLE Country
 DROP TABLE Board
 
