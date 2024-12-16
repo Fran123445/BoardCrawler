@@ -8,12 +8,12 @@ class Board:
 
 @dataclass
 class AttachedFile:
-    file_id: int
     filename: str
+    fileTimestamp: int
     extension: str
     size: int
-    height: int
     width: int
+    height: int
 
 @dataclass
 class Reply:

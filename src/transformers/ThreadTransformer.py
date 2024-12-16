@@ -3,6 +3,9 @@ from models.models import Reply, Thread
 
 class ThreadTransformer:
 
+    def __init__(self, file_transformer):
+        self.file_transformer = file_transformer
+
     def _get_reply_id(self, container):
         return int(container.find('div', class_='post')['id'][1:])
 
@@ -31,15 +34,6 @@ class ThreadTransformer:
 
         return replies_metioned
 
-    def _get_filename(self, container):
-        filename = None
-        file_text_div = container.find('div', class_='fileText')
-        if file_text_div:
-            file_link = file_text_div.find('a')
-            if file_link:
-                filename = file_link.get_text()
-        return filename
-
     def _get_anon_name(self, container):
         name_span = container.find('span', class_='name')
         return name_span.get_text().strip() if name_span else None
@@ -52,6 +46,14 @@ class ThreadTransformer:
         flag_span = container.find('span', class_='flag')
         return flag_span['title'] if flag_span else None
 
+    def _get_file(self, container):
+        file_container = container.find('div', class_='fileText')
+
+        if file_container == None:
+            return None
+
+        return self.file_transformer.transform_file(file_container)
+
     def transformThread(self, thread: Thread, thread_html):
         soup = BeautifulSoup(thread_html, 'html.parser')
 
@@ -59,11 +61,10 @@ class ThreadTransformer:
         for container in post_containers:
             reply_id = self._get_reply_id(container)
             creation_time = int(self._get_creation_time(container))
-            filename = self._get_filename(container)
             anon_name = self._get_anon_name(container)
             anon_id = self._get_anon_id(container)
             anon_country = self._get_anon_country(container)
-
+            attached_file = self._get_file(container)
             content = self._get_content(container)
             replies_metioned = self._get_replies_mentions(container)
 
@@ -71,7 +72,7 @@ class ThreadTransformer:
                                  creation_time=creation_time,
                                  content=content,
                                  replies_metioned=replies_metioned,
-                                 filename=filename,
+                                 file=attached_file,
                                  anon_name=anon_name,
                                  anon_id=anon_id,
                                  anon_country=anon_country))
