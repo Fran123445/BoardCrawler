@@ -7,6 +7,14 @@ class Board:
     title: str
 
 @dataclass
+class File:
+    file_id: int
+    filename: str
+    size: int
+    height: int
+    width: int
+
+@dataclass
 class Reply:
     reply_id: int
     creation_time: int # timestamp
