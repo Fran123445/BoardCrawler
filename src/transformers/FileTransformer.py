@@ -47,12 +47,12 @@ class FileTransfomer:
     def transform_file(self, file_container):
         filename_data = file_container.find('a')
         filename, extension = self._get_filename_and_ext(filename_data)
-        fileTimestamp = self._get_file_timestamp(filename_data)
+        file_timestamp = self._get_file_timestamp(filename_data)
         size, width, height = self._get_file_size_and_dimensions(file_container)
 
         file = AttachedFile(
             filename,
-            fileTimestamp,
+            file_timestamp,
             extension,
             size,
             width,

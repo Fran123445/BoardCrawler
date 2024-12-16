@@ -9,7 +9,7 @@ class Board:
 @dataclass
 class AttachedFile:
     filename: str
-    fileTimestamp: int
+    file_timestamp: int
     extension: str
     size: int
     width: int

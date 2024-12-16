@@ -9,7 +9,7 @@ class ThreadExtractor:
         self.session = session
         self.semaphore = semaphore
 
-    async def extractThread(self, board: Board, thread: Thread):
+    async def extract_thread(self, board: Board, thread: Thread):
         url = f"https://boards.4chan.org/{board.board_name}/thread/{thread.thread_number}/"
 
         async with self.semaphore:

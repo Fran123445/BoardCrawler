@@ -54,7 +54,7 @@ class ThreadTransformer:
 
         return self.file_transformer.transform_file(file_container)
 
-    def transformThread(self, thread: Thread, thread_html):
+    def transform_thread(self, thread: Thread, thread_html):
         soup = BeautifulSoup(thread_html, 'html.parser')
 
         post_containers = soup.find_all('div', class_='postContainer')

@@ -3,7 +3,7 @@ from typing import List
 
 class CatalogTransformer:
 
-    def transformCatalog(self, board: Board, catalog: List[Board]):
+    def transform_catalog(self, board: Board, catalog: List[Board]):
         thread_list = []
 
         for page in catalog:
