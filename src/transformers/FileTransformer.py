@@ -4,7 +4,7 @@ from models.models import AttachedFile
 class FileTransfomer:
 
     def __init__(self):
-        self.size_and_dims_regex_pattern = re.compile(pattern=r"\((\d+(?:\.\d+)?)\s?([KM]?B),\s?(\d+)x(\d+)\)")
+        self.size_and_dims_regex_pattern = re.compile(pattern=r"\((\d+(?:\.\d+)?)\s?([KM]?B)(?:,\s?(\d+)x(\d+))?(?:,\s?(.+))?\)")
         """
             A little explanation of the regex pattern:
             On 4chan, next to the filename on a reply, you can see the size of the file, 
@@ -13,10 +13,12 @@ class FileTransfomer:
             The idea behind the above pattern is to extract those into 4 groups, one
             for the size, one for the units, one for the width and another one for the height.
             The units group is because every size will be stored in KB.
+            The whole second part is optional because some (all?) boards allow PDF files to be uploaded, which
+            comply with the format (X KB, PDF).
         """
 
     def _get_filename_and_ext(self, container):
-        filename_with_ext = container['title'] if container.get('title') else container.text
+        filename_with_ext = container.get('title',  container.text)
 
         if filename_with_ext == 'Spoiler Image':
             parent = container.find_parent('div', class_='fileText')
@@ -36,15 +38,20 @@ class FileTransfomer:
 
     def _get_file_size_and_dimensions(self, container):
         match = self.size_and_dims_regex_pattern.search(container.text)
+
         size = float(match.group(1))
         units = match.group(2)
-        width = int(match.group(3))
-        height = int(match.group(4))
 
         if units == 'MB':
             size = size*1024
         elif units == 'B':
             size = size/1024
+
+        if match.group(5) == 'PDF':
+            return size, None, None
+
+        width = int(match.group(3))
+        height = int(match.group(4))
 
         return size, width, height
 
