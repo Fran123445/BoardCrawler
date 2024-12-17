@@ -32,7 +32,7 @@ class ThreadLoader(Loader):
         return mentioned_reply_tuples
 
     def _get_file_tuple(self, board_id, reply_id, file: AttachedFile):
-        return (board_id, reply_id, file.filename, file.fileTimestamp, file.extension, file.size, file.width, file.height)
+        return (board_id, reply_id, file.filename, file.file_timestamp, file.extension, file.size, file.width, file.height)
 
     def _insert_replies(self, cursor, thread_list, board_id):
         reply_tuples = []

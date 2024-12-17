@@ -12,6 +12,6 @@ class BoardTransformer:
         board_list = []
 
         for raw_board_info in raw_board_list:
-                board_list.append(self.transformBoard(raw_board_info))
+                board_list.append(self.transform_board(raw_board_info))
 
         return board_list
