@@ -40,12 +40,12 @@ CREATE TABLE Thread (
 CREATE TABLE Reply (
     board_id DECIMAL(4),
     reply_id DECIMAL(18),
+	thread_number DECIMAL(18) NOT NULL,
     anon_name NVARCHAR(256),
     anon_id NVARCHAR(16),
     anon_country DECIMAL(4),
     creation_time DATETIME NOT NULL,
     content NVARCHAR(MAX),
-	thread_number DECIMAL(18) NOT NULL,
     PRIMARY KEY (board_id, reply_id),
     FOREIGN KEY (board_id) REFERENCES Board(id),
 	FOREIGN KEY (board_id, thread_number) REFERENCES Thread(board_id, thread_number),
