@@ -17,6 +17,11 @@ class FileTransfomer:
 
     def _get_filename_and_ext(self, container):
         filename_with_ext = container['title'] if container.get('title') else container.text
+
+        if filename_with_ext == 'Spoiler Image':
+            parent = container.find_parent('div', class_='fileText')
+            filename_with_ext = parent.get('title')
+
         split = filename_with_ext.split('.')
         filename = split[0]
         extension = split[1]
