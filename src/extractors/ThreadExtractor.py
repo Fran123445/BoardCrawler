@@ -14,7 +14,7 @@ class ThreadExtractor:
 
         async with self.semaphore:
             async with self.session.get(url) as response:
-                return await response.text()
+                return await response.text(errors='replace')
 
     async def generate_extraction_tasks(self, board: Board, catalogue: list):
         tasks = []
