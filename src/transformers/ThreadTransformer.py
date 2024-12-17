@@ -70,7 +70,7 @@ class ThreadTransformer:
             anon_country = self._get_anon_country(name_block)
             attached_file = self._get_file(post)
             content = self._get_content(post)
-            replies_metioned = self._get_replies_mentions(post_info)
+            replies_metioned = self._get_replies_mentions(post)
 
             thread.replies.append(Reply(reply_id=reply_id,
                                  creation_time=creation_time,
@@ -81,7 +81,9 @@ class ThreadTransformer:
                                  anon_id=anon_id,
                                  anon_country=anon_country))
 
-    def transform_threads(self, catalogue: list, thread_htmls: list):
+        return thread
+
+    def transform_thread_sequentially(self, catalogue: list, thread_htmls: list):
         thread_amount = len(catalogue)
         for i in range(0, thread_amount):
             thread = catalogue[i]
