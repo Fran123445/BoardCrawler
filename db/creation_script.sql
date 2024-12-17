@@ -104,9 +104,11 @@ BEGIN
 	SET @country_id = (SELECT c.country_id FROM Country c WHERE c.country_name = @country_name)
 
 	IF @country_id IS NULL
+	BEGIN
 		INSERT INTO Country (country_name) VALUES (@country_name)
 		SET @country_id = SCOPE_IDENTITY()
-	
+	END
+
 	RETURN @country_id
 END
 GO
@@ -146,7 +148,7 @@ BEGIN
 			@reply_id,
 			@anon_name,
 			@anon_id,
-			@anon_country_name,
+			@country_id,
 			@date,
 			@content,
 			@thread_number
@@ -158,7 +160,19 @@ GO
 CREATE PROCEDURE uspInsertMentionedReply(@board_id DECIMAL(4), @reply_id DECIMAL(18), @mentioned_reply_id DECIMAL(18))
 AS
 BEGIN
-	INSERT INTO MentionedReply (board_id, reply_id, mentioned_reply_id) VALUES (@board_id, @reply_id, @mentioned_reply_id)
+	BEGIN TRY
+		INSERT INTO MentionedReply (board_id, reply_id, mentioned_reply_id) VALUES (@board_id, @reply_id, @mentioned_reply_id)
+	END TRY
+	BEGIN CATCH
+		IF ERROR_NUMBER() = 2627 -- Replies can mention the same reply multiple times
+		BEGIN
+			RETURN 1
+		END
+		ELSE
+		BEGIN
+			;THROW
+		END
+	END CATCH
 END
 GO
 
