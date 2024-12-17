@@ -16,3 +16,13 @@ class ThreadExtractor:
             async with self.session.get(url) as response:
                 return await response.text()
 
+    async def generate_extraction_tasks(self, board: Board, catalogue: list):
+        tasks = []
+
+        for thread in catalogue:
+            task = asyncio.create_task(self.extract_thread(board, thread))
+            tasks.append(task)
+
+        raw_threads = await asyncio.gather(*tasks)
+
+        return raw_threads

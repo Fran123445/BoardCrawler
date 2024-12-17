@@ -76,3 +76,10 @@ class ThreadTransformer:
                                  anon_name=anon_name,
                                  anon_id=anon_id,
                                  anon_country=anon_country))
+
+    def transform_threads(self, catalogue: list, thread_htmls: list):
+        thread_amount = len(catalogue)
+        for i in range(0, thread_amount):
+            thread = catalogue[i]
+            thread_html = thread_htmls[i]
+            self.transform_thread(thread, thread_html)
