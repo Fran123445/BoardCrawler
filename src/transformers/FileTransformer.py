@@ -4,7 +4,7 @@ from models.models import AttachedFile
 class FileTransfomer:
 
     def __init__(self):
-        self.size_and_dims_regex_pattern = r"\((\d+(?:\.\d+)?)\s?([KM]?B),\s?(\d+)x(\d+)\)"
+        self.size_and_dims_regex_pattern = re.compile(pattern=r"\((\d+(?:\.\d+)?)\s?([KM]?B),\s?(\d+)x(\d+)\)")
         """
             A little explanation of the regex pattern:
             On 4chan, next to the filename on a reply, you can see the size of the file, 
@@ -35,7 +35,7 @@ class FileTransfomer:
         return int(file_timestamp_without_extension)
 
     def _get_file_size_and_dimensions(self, container):
-        match = re.search(self.size_and_dims_regex_pattern, container.text)
+        match = self.size_and_dims_regex_pattern.search(container.text)
         size = float(match.group(1))
         units = match.group(2)
         width = int(match.group(3))

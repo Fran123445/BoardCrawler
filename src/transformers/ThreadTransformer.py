@@ -7,7 +7,7 @@ class ThreadTransformer:
         self.file_transformer = file_transformer
 
     def _get_reply_id(self, container):
-        return int(container.find('div', class_='post')['id'][1:])
+        return int(container['id'][2:])
 
     def _get_creation_time(self, container):
         date_time_span = container.find('span', class_='dateTime')
@@ -36,11 +36,11 @@ class ThreadTransformer:
 
     def _get_anon_name(self, container):
         name_span = container.find('span', class_='name')
-        return name_span.get_text().strip() if name_span else None
+        return name_span.get_text()
 
     def _get_anon_id(self, container):
         posteruid_span = container.find('span', class_='posteruid')
-        return posteruid_span.find('span', class_='hand').get_text().strip() if posteruid_span else None
+        return posteruid_span.find('span', class_='hand').get_text() if posteruid_span else None
 
     def _get_anon_country(self, container):
         flag_span = container.find('span', class_='flag')
@@ -55,18 +55,22 @@ class ThreadTransformer:
         return self.file_transformer.transform_file(file_container)
 
     def transform_thread(self, thread: Thread, thread_html):
-        soup = BeautifulSoup(thread_html, 'html.parser')
+        soup = BeautifulSoup(thread_html, 'lxml')
 
         post_containers = soup.find_all('div', class_='postContainer')
         for container in post_containers:
-            reply_id = self._get_reply_id(container)
-            creation_time = int(self._get_creation_time(container))
-            anon_name = self._get_anon_name(container)
-            anon_id = self._get_anon_id(container)
-            anon_country = self._get_anon_country(container)
-            attached_file = self._get_file(container)
-            content = self._get_content(container)
-            replies_metioned = self._get_replies_mentions(container)
+            post = container.find('div', class_='post')
+            post_info = post.find('div', class_='postInfo')
+            name_block = post_info.find('span', class_='nameBlock')
+
+            reply_id = self._get_reply_id(post_info)
+            creation_time = int(self._get_creation_time(post_info))
+            anon_name = self._get_anon_name(name_block)
+            anon_id = self._get_anon_id(name_block)
+            anon_country = self._get_anon_country(name_block)
+            attached_file = self._get_file(post)
+            content = self._get_content(post)
+            replies_metioned = self._get_replies_mentions(post_info)
 
             thread.replies.append(Reply(reply_id=reply_id,
                                  creation_time=creation_time,
