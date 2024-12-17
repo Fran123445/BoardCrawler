@@ -52,7 +52,9 @@ class ThreadLoader(Loader):
                 reply_tuples.append(reply_tuple)
 
         cursor.executemany('EXEC uspInsertReply ?,?,?,?,?,?,?,?', reply_tuples)
-        cursor.executemany('EXEC uspInsertMentionedReply ?,?,?', mentioned_reply_tuples)
+
+        if mentioned_reply_tuples:
+            cursor.executemany('EXEC uspInsertMentionedReply ?,?,?', mentioned_reply_tuples)
         cursor.executemany('EXEC uspInsertAttachedFile ?,?,?,?,?,?,?,?', attached_file_tuples)
 
     def bulk_load(self, data_list: list):
