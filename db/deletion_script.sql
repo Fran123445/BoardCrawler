@@ -20,3 +20,4 @@ DROP PROCEDURE uspInsertThread
 DROP PROCEDURE uspInsertCountry
 DROP PROCEDURE uspInsertReply
 DROP PROCEDURE uspInsertMentionedReply
+DROP PROCEDURE uspInsertAttachedFile

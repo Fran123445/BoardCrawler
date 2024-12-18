@@ -208,3 +208,11 @@ BEGIN
 			@height
 	)
 END
+
+-- Create indexes
+
+CREATE NONCLUSTERED INDEX IX_Reply_Country ON
+	[dbo].[Reply] ([anon_country])
+
+CREATE NONCLUSTERED INDEX IX_Reply_Board ON
+	[dbo].[Reply] ([board_id], [thread_number])
