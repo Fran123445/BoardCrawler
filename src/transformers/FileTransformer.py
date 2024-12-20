@@ -24,14 +24,12 @@ class FileTransfomer:
             parent = container.find_parent('div', class_='fileText')
             filename_with_ext = parent.get('title')
 
-        split = filename_with_ext.split('.')
-        filename = split[0]
-        extension = split[1]
+        filename, extension = filename_with_ext.rsplit('.', 1)
 
         return filename, extension
 
     def _get_file_timestamp(self, container):
-        file_timestamp = container['href'].split('/')[-1]
+        file_timestamp = container['href'].rsplit('/', 1)[1]
         file_timestamp_without_extension = file_timestamp.split('.')[0]
 
         return int(file_timestamp_without_extension)

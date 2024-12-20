@@ -58,6 +58,7 @@ class ThreadTransformer:
         soup = BeautifulSoup(thread_html, 'lxml')
 
         post_containers = soup.find_all('div', class_='postContainer')
+
         for container in post_containers:
             post = container.find('div', class_='post')
             post_info = post.find('div', class_='postInfo')
