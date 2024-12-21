@@ -208,6 +208,41 @@ BEGIN
 			@height
 	)
 END
+GO
+
+-- Get the threads with the highest amount of replies
+CREATE PROCEDURE uspGetTopThreads(@board_name NVARCHAR(4))
+AS
+BEGIN
+	DECLARE @board_id NVARCHAR(4)
+	SET @board_id = dbo.findBoardId(@board_name)
+
+	SELECT 
+		R.thread_number,
+		COUNT(*) AS number_of_replies
+	FROM Reply R
+	WHERE R.board_id = @board_id
+	GROUP BY R.thread_number
+	ORDER BY 2 DESC
+END
+
+-- Given a thread, get N amount of replies that have at least X words
+CREATE PROCEDURE uspGetRepliesForThread
+    @BoardName NVARCHAR(4),
+    @ThreadNumber DECIMAL(18),
+    @TopN INT,
+    @MinWords INT
+AS
+BEGIN
+    SELECT TOP (@TopN)
+        R.content
+    FROM Reply R
+    WHERE
+        R.board_id = dbo.findBoardId(@BoardName) AND
+        R.thread_number = @ThreadNumber AND
+        (SELECT COUNT(*) FROM STRING_SPLIT(R.content, ' ')) > @MinWords;
+END
+GO
 
 -- Create indexes
 
