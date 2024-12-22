@@ -241,7 +241,7 @@ BEGIN
     WHERE
         R.board_id = dbo.findBoardId(@BoardName) AND
         R.thread_number = @ThreadNumber AND
-        (SELECT COUNT(*) FROM STRING_SPLIT(R.content, ' ')) > @MinWords;
+        (SELECT COUNT(*) FROM STRING_SPLIT(R.content, ' ')) >= @MinWords;
 END
 GO
 
