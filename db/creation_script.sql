@@ -245,6 +245,17 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE uspGetThreadTitle(@board_name NVARCHAR(4), @thread_number DECIMAL(18))
+AS
+BEGIN
+	SELECT 
+		title
+	FROM Thread t
+	WHERE 
+		t.board_id = dbo.findBoardId(@board_name) AND
+		t.thread_number = @thread_number
+END
+
 -- Create indexes
 
 CREATE NONCLUSTERED INDEX IX_Reply_Country ON
