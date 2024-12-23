@@ -218,11 +218,17 @@ BEGIN
 	SET @board_id = dbo.findBoardId(@board_name)
 
 	SELECT TOP (@TopN)
+		T.title,
 		R.thread_number,
 		COUNT(*) AS number_of_replies
-	FROM Reply R
-	WHERE R.board_id = @board_id
-	GROUP BY R.thread_number
+	FROM Reply R JOIN Thread T ON
+		R.thread_number = T.thread_number
+	WHERE 
+		R.board_id = @board_id AND
+		T.board_id = @board_id
+	GROUP BY 
+		R.thread_number,
+		T.title
 	ORDER BY 2 DESC
 END
 GO
@@ -244,17 +250,6 @@ BEGIN
         (SELECT COUNT(*) FROM STRING_SPLIT(R.content, ' ')) >= @MinWords;
 END
 GO
-
-CREATE PROCEDURE uspGetThreadTitle(@board_name NVARCHAR(4), @thread_number DECIMAL(18))
-AS
-BEGIN
-	SELECT 
-		title
-	FROM Thread t
-	WHERE 
-		t.board_id = dbo.findBoardId(@board_name) AND
-		t.thread_number = @thread_number
-END
 
 -- Create indexes
 
