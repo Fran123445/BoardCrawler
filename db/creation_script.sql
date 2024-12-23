@@ -229,7 +229,7 @@ BEGIN
 	GROUP BY 
 		R.thread_number,
 		T.title
-	ORDER BY 2 DESC
+	ORDER BY 3 DESC
 END
 GO
 
@@ -258,3 +258,5 @@ CREATE NONCLUSTERED INDEX IX_Reply_Country ON
 
 CREATE NONCLUSTERED INDEX IX_Reply_Board ON
 	[dbo].[Reply] ([board_id], [thread_number])
+
+EXEC uspGetTopThreads 'g', 50
