@@ -11,50 +11,50 @@ class ThreadLoader(Loader):
 
         cursor.executemany('EXEC uspInsertThread ?, ?, ?', thread_tuples)
 
-    def _get_reply_tuple(self, reply, board_id, thread_number):
-        reply_tuple = (board_id,
-                     reply.reply_id,
-                     reply.anon_name,
-                     reply.anon_id,
-                     reply.anon_country,
-                     reply.creation_time,
-                     reply.content,
-                     thread_number)
+    def _get_post_tuple(self, post, board_id, thread_number):
+        post_tuple = (board_id,
+                       post.post_id,
+                       post.anon_name,
+                       post.anon_id,
+                       post.anon_country,
+                       post.creation_time,
+                       post.content,
+                       thread_number)
 
-        return reply_tuple
+        return post_tuple
 
-    def _get_mentioned_replies(self, reply, board_id):
-        mentioned_reply_tuples = []
+    def _get_mentioned_posts(self, post, board_id):
+        mentioned_posts_tuples = []
 
-        for reply_mentioned in reply.replies_metioned:
-            mentioned_reply_tuples.append((board_id, reply.reply_id, reply_mentioned))
+        for post_mentioned in post.posts_metioned:
+            mentioned_posts_tuples.append((board_id, post.post_id, post_mentioned))
 
-        return mentioned_reply_tuples
+        return mentioned_posts_tuples
 
-    def _get_file_tuple(self, board_id, reply_id, file: AttachedFile):
-        return (board_id, reply_id, file.filename, file.file_timestamp, file.extension, file.size, file.width, file.height)
+    def _get_file_tuple(self, board_id, post_id, file: AttachedFile):
+        return (board_id, post_id, file.filename, file.file_timestamp, file.extension, file.size, file.width, file.height)
 
-    def _insert_replies(self, cursor, thread_list, board_id):
-        reply_tuples = []
-        mentioned_reply_tuples = []
+    def _insert_posts(self, cursor, thread_list, board_id):
+        post_tuples = []
+        mentioned_posts_tuples = []
         attached_file_tuples = []
 
         for thread in thread_list:
-            for reply in thread.replies:
-                reply_tuple = self._get_reply_tuple(reply, board_id, thread.thread_number)
-                mentioned_replies = self._get_mentioned_replies(reply, board_id)
+            for post in thread.posts:
+                post_tuple = self._get_post_tuple(post, board_id, thread.thread_number)
+                mentioned_posts = self._get_mentioned_posts(post, board_id)
 
-                if reply.file:
-                    attached_file_tuple = self._get_file_tuple(board_id, reply.reply_id, reply.file)
+                if post.file:
+                    attached_file_tuple = self._get_file_tuple(board_id, post.post_id, post.file)
                     attached_file_tuples.append(attached_file_tuple)
 
-                mentioned_reply_tuples.extend(mentioned_replies)
-                reply_tuples.append(reply_tuple)
+                mentioned_posts_tuples.extend(mentioned_posts)
+                post_tuples.append(post_tuple)
 
-        cursor.executemany('EXEC uspInsertReply ?,?,?,?,?,?,?,?', reply_tuples)
+        cursor.executemany('EXEC uspInsertPost ?,?,?,?,?,?,?,?', post_tuples)
 
-        if mentioned_reply_tuples:
-            cursor.executemany('EXEC uspInsertMentionedReply ?,?,?', mentioned_reply_tuples)
+        if mentioned_posts_tuples:
+            cursor.executemany('EXEC uspInsertMentionedPost ?,?,?', mentioned_posts_tuples)
         cursor.executemany('EXEC uspInsertAttachedFile ?,?,?,?,?,?,?,?', attached_file_tuples)
 
     def bulk_load(self, data_list: list):
@@ -63,6 +63,6 @@ class ThreadLoader(Loader):
         board_id = cursor.fetchone()[0]
 
         self._insert_threads(cursor, data_list, board_id)
-        self._insert_replies(cursor, data_list, board_id)
+        self._insert_posts(cursor, data_list, board_id)
         cursor.commit()
 

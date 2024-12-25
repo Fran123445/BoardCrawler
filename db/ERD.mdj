@@ -338,7 +338,7 @@
 									"top": 517,
 									"width": 248.89892578125,
 									"height": 13,
-									"text": "Reply"
+									"text": "Post"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -933,9 +933,9 @@
 									"parentStyle": true,
 									"left": 1344,
 									"top": 613,
-									"width": 263.33984375,
+									"width": 259.708984375,
 									"height": 13,
-									"text": "MentionedReply"
+									"text": "MentionedPost"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -960,7 +960,7 @@
 											"parentStyle": true,
 											"left": 1349,
 											"top": 636,
-											"width": 253.33984375,
+											"width": 249.708984375,
 											"height": 13
 										},
 										{
@@ -976,7 +976,7 @@
 											"parentStyle": true,
 											"left": 1349,
 											"top": 651,
-											"width": 253.33984375,
+											"width": 249.708984375,
 											"height": 13
 										},
 										{
@@ -992,7 +992,7 @@
 											"parentStyle": true,
 											"left": 1349,
 											"top": 666,
-											"width": 253.33984375,
+											"width": 249.708984375,
 											"height": 13
 										}
 									],
@@ -1000,7 +1000,7 @@
 									"parentStyle": true,
 									"left": 1344,
 									"top": 631,
-									"width": 263.33984375,
+									"width": 259.708984375,
 									"height": 53
 								}
 							],
@@ -1008,7 +1008,7 @@
 							"parentStyle": false,
 							"left": 1344,
 							"top": 608,
-							"width": 263.33984375,
+							"width": 259.708984375,
 							"height": 76,
 							"autoResize": true,
 							"nameLabel": {
@@ -1427,8 +1427,8 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1632,
-									"top": 680,
+									"left": 1629,
+									"top": 646,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -1446,7 +1446,7 @@
 								"$ref": "AAAAAAGTn2735LkaQC4="
 							},
 							"lineStyle": 2,
-							"points": "533:552;533:464;1656:464;1656:672;1607:672",
+							"points": "533:552;533:464;1656:464;1656:638;1604:638",
 							"nameLabel": {
 								"$ref": "AAAAAAGTzOVrCUtcO+I="
 							},
@@ -1787,7 +1787,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGTn27RJrkT4w8="
 					},
-					"name": "Reply",
+					"name": "Post",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
@@ -1865,7 +1865,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGTn4RSN7ltAhY="
 							},
-							"name": "reply_id",
+							"name": "post_id",
 							"type": "decimal",
 							"length": "18",
 							"primaryKey": true
@@ -2039,7 +2039,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGTn27RJrkT4w8="
 					},
-					"name": "MentionedReply",
+					"name": "MentionedPost",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
@@ -2088,7 +2088,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGTn6i867pTK4I="
 							},
-							"name": "reply_id",
+							"name": "post_id",
 							"type": "decimal",
 							"length": "18",
 							"primaryKey": true,
@@ -2100,7 +2100,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGTn6i867pTK4I="
 							},
-							"name": "mentioned_reply_id",
+							"name": "mentioned_post_id",
 							"type": "decimal",
 							"length": "18",
 							"primaryKey": true,
@@ -2163,7 +2163,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGTzOFNQ0rl9JE="
 							},
-							"name": "reply_id",
+							"name": "post_id",
 							"type": "decimal",
 							"length": "18",
 							"primaryKey": true

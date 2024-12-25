@@ -16,11 +16,11 @@ class AttachedFile:
     height: int
 
 @dataclass
-class Reply:
-    reply_id: int
+class Post:
+    post_id: int
     creation_time: int # timestamp
     content: str
-    replies_metioned: Optional[List[int]] = None
+    posts_metioned: Optional[List[int]] = None
     file: Optional[AttachedFile] = None
     anon_name: Optional[str] = None
     anon_id: Optional[str] = None
@@ -31,4 +31,4 @@ class Thread:
     board_name: str
     thread_number: int
     title: Optional[str] = None
-    replies: List[Reply] = field(default_factory=list)
+    posts: List[Post] = field(default_factory=list)

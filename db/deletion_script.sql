@@ -2,8 +2,8 @@ USE BoardCrawler
 
 -- Drop tables
 
-DROP TABLE MentionedReply
-DROP TABLE Reply
+DROP TABLE MentionedPost
+DROP TABLE Post
 DROP TABLE Thread
 DROP TABLE AttachedFile
 DROP TABLE Country
@@ -18,6 +18,6 @@ DROP FUNCTION dbo.findBoardId
 DROP PROCEDURE uspInsertBoard
 DROP PROCEDURE uspInsertThread
 DROP PROCEDURE uspInsertCountry
-DROP PROCEDURE uspInsertReply
-DROP PROCEDURE uspInsertMentionedReply
+DROP PROCEDURE uspInsertPost
+DROP PROCEDURE uspInsertMentionedPost
 DROP PROCEDURE uspInsertAttachedFile

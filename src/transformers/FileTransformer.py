@@ -7,7 +7,7 @@ class FileTransfomer:
         self.size_and_dims_regex_pattern = re.compile(pattern=r"\((\d+(?:\.\d+)?)\s?([KM]?B)(?:,\s?(\d+)x(\d+))?(?:,\s?(.+))?\)")
         """
             A little explanation of the regex pattern:
-            On 4chan, next to the filename on a reply, you can see the size of the file, 
+            On 4chan, next to the filename on a post, you can see the size of the file, 
             its width and its height in the following format:
             (X KB, WxH)
             The idea behind the above pattern is to extract those into 4 groups, one

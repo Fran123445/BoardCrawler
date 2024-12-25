@@ -17,14 +17,14 @@ CREATE TABLE Country (
 
 CREATE TABLE AttachedFile (
 	board_id DECIMAL(4),
-	reply_id DECIMAL(18),
+	post_id DECIMAL(18),
 	filename NVARCHAR(256),
 	fileTimestamp decimal(18),
 	extension NVARCHAR(6),
 	size DECIMAL(18),
 	width DECIMAL(8),
 	height DECIMAL(8),
-	PRIMARY KEY (board_id, reply_id),
+	PRIMARY KEY (board_id, post_id),
 	FOREIGN KEY (board_id) REFERENCES Board(id)
 )
 
@@ -37,28 +37,28 @@ CREATE TABLE Thread (
     FOREIGN KEY (board_id) REFERENCES Board(id),
 )
 
-CREATE TABLE Reply (
+CREATE TABLE Post (
     board_id DECIMAL(4),
-    reply_id DECIMAL(18),
+    post_id DECIMAL(18),
 	thread_number DECIMAL(18) NOT NULL,
     anon_name NVARCHAR(256),
     anon_id NVARCHAR(16),
     anon_country DECIMAL(4),
     creation_time DATETIME NOT NULL,
     content NVARCHAR(MAX),
-    PRIMARY KEY (board_id, reply_id),
+    PRIMARY KEY (board_id, post_id),
     FOREIGN KEY (board_id) REFERENCES Board(id),
 	FOREIGN KEY (board_id, thread_number) REFERENCES Thread(board_id, thread_number),
     FOREIGN KEY (anon_country) REFERENCES Country(country_id),
 )
 
-CREATE TABLE MentionedReply (
+CREATE TABLE MentionedPost (
     board_id DECIMAL(4),
-    reply_id DECIMAL(18),
-    mentioned_reply_id DECIMAL(18),
-    PRIMARY KEY (board_id, reply_id, mentioned_reply_id),
-    FOREIGN KEY (board_id, reply_id) REFERENCES Reply(board_id, reply_id),
-    FOREIGN KEY (board_id, mentioned_reply_id) REFERENCES Reply(board_id, reply_id)
+    post_id DECIMAL(18),
+    mentioned_post_id DECIMAL(18),
+    PRIMARY KEY (board_id, post_id, mentioned_post_id),
+    FOREIGN KEY (board_id, post_id) REFERENCES Post(board_id, post_id),
+    FOREIGN KEY (board_id, mentioned_post_id) REFERENCES Post(board_id, post_id)
 )
 GO
 
@@ -113,10 +113,10 @@ BEGIN
 END
 GO
 
--- Reply insertion
-CREATE PROCEDURE uspInsertReply(
+-- Post insertion
+CREATE PROCEDURE uspInsertPost(
 				@board_id DECIMAL(4),
-				@reply_id DECIMAL(18),
+				@post_id DECIMAL(18),
 				@anon_name NVARCHAR(256),
 				@anon_id NVARCHAR(16),
 				@anon_country_name NVARCHAR(256),
@@ -134,9 +134,9 @@ BEGIN
 		EXEC @country_id = dbo.uspInsertCountry @anon_country_name
 	END
 
-	INSERT INTO Reply (
+	INSERT INTO Post (
 			board_id, 
-			reply_id, 
+			post_id, 
 			anon_name, 
 			anon_id, 
 			anon_country, 
@@ -145,7 +145,7 @@ BEGIN
 			thread_number
 	) VALUES (
 			@board_id,
-			@reply_id,
+			@post_id,
 			@anon_name,
 			@anon_id,
 			@country_id,
@@ -156,15 +156,15 @@ BEGIN
 END
 GO
 
--- MentionedReply insertion
-CREATE PROCEDURE uspInsertMentionedReply(@board_id DECIMAL(4), @reply_id DECIMAL(18), @mentioned_reply_id DECIMAL(18))
+-- MentionedPost insertion
+CREATE PROCEDURE uspInsertMentionedPost(@board_id DECIMAL(4), @post_id DECIMAL(18), @mentioned_post_id DECIMAL(18))
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO MentionedReply (board_id, reply_id, mentioned_reply_id) VALUES (@board_id, @reply_id, @mentioned_reply_id)
+		INSERT INTO MentionedPost (board_id, post_id, mentioned_post_id) VALUES (@board_id, @post_id, @mentioned_post_id)
 	END TRY
 	BEGIN CATCH
-		IF ERROR_NUMBER() = 2627 -- Replies can mention the same reply multiple times
+		IF ERROR_NUMBER() = 2627 -- Posts can mention the same post multiple times
 		BEGIN
 			RETURN 1
 		END
@@ -179,7 +179,7 @@ GO
 -- Attached file insertion
 CREATE PROCEDURE uspInsertAttachedFile(
 			@board_id DECIMAL(4),
-			@reply_id DECIMAL(18),
+			@post_id DECIMAL(18),
 			@filename NVARCHAR(256),
 			@fileTimestamp decimal(18),
 			@extension NVARCHAR(6),
@@ -190,7 +190,7 @@ AS
 BEGIN
 	INSERT INTO AttachedFile (
 			board_id,
-			reply_id,
+			post_id,
 			filename,
 			fileTimestamp,
 			extension,
@@ -199,7 +199,7 @@ BEGIN
 			height)
 	VALUES (
 			@board_id,
-			@reply_id,
+			@post_id,
 			@filename,
 			@fileTimestamp,
 			@extension,
@@ -210,7 +210,7 @@ BEGIN
 END
 GO
 
--- Get the threads with the highest amount of replies
+-- Get the threads with the highest amount of posts
 CREATE PROCEDURE uspGetTopThreads(@board_name NVARCHAR(10), @TopN INT)
 AS
 BEGIN
@@ -219,22 +219,22 @@ BEGIN
 
 	SELECT TOP (@TopN)
 		T.title,
-		R.thread_number,
-		COUNT(*) AS number_of_replies
-	FROM Reply R JOIN Thread T ON
-		R.thread_number = T.thread_number
+		P.thread_number,
+		COUNT(*) AS number_of_posts
+	FROM Post P JOIN Thread T ON
+		P.thread_number = T.thread_number
 	WHERE 
-		R.board_id = @board_id AND
+		P.board_id = @board_id AND
 		T.board_id = @board_id
 	GROUP BY 
-		R.thread_number,
+		P.thread_number,
 		T.title
 	ORDER BY 3 DESC
 END
 GO
 
--- Given a thread, get N amount of replies that have at least X words
-CREATE PROCEDURE uspGetRepliesForThread
+-- Given a thread, get N amount of posts that have at least X words
+CREATE PROCEDURE uspGetPostsForThread
     @BoardName NVARCHAR(10),
     @ThreadNumber DECIMAL(18),
     @TopN INT,
@@ -242,19 +242,19 @@ CREATE PROCEDURE uspGetRepliesForThread
 AS
 BEGIN
     SELECT TOP (@TopN)
-        R.content
-    FROM Reply R
+        P.content
+    FROM Post P
     WHERE
-        R.board_id = dbo.findBoardId(@BoardName) AND
-        R.thread_number = @ThreadNumber AND
-        (SELECT COUNT(*) FROM STRING_SPLIT(R.content, ' ')) >= @MinWords;
+        P.board_id = dbo.findBoardId(@BoardName) AND
+        P.thread_number = @ThreadNumber AND
+        (SELECT COUNT(*) FROM STRING_SPLIT(P.content, ' ')) >= @MinWords;
 END
 GO
 
 -- Create indexes
 
-CREATE NONCLUSTERED INDEX IX_Reply_Country ON
-	[dbo].[Reply] ([anon_country])
+CREATE NONCLUSTERED INDEX IX_Post_Country ON
+	[dbo].[Post] ([anon_country])
 
-CREATE NONCLUSTERED INDEX IX_Reply_Board ON
-	[dbo].[Reply] ([board_id], [thread_number])
+CREATE NONCLUSTERED INDEX IX_Post_Board ON
+	[dbo].[Post] ([board_id], [thread_number])
