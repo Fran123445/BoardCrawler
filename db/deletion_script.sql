@@ -21,3 +21,5 @@ DROP PROCEDURE uspInsertCountry
 DROP PROCEDURE uspInsertPost
 DROP PROCEDURE uspInsertMentionedPost
 DROP PROCEDURE uspInsertAttachedFile
+DROP PROCEDURE uspGetPostsForThread
+DROP PROCEDURE uspGetTopThreads
