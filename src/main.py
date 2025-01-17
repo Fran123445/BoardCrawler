@@ -1,5 +1,5 @@
 import asyncio
-import concurrent.futures
+import time
 
 import pyodbc
 import aiohttp
@@ -11,15 +11,12 @@ from src.transformers.ThreadTransformer import ThreadTransformer
 from src.transformers.CatalogTransformer import CatalogTransformer
 from src.loaders.BoardLoader import BoardLoader
 from src.loaders.ThreadLoader import ThreadLoader
-from src.transformers.FileTransformer import  FileTransfomer
 
 async def main():
-    # Will eventually be divided into different classes or functions, but for now it's this
-
     connection = pyodbc.connect() # a config file will handle this, among other things
 
     session = aiohttp.ClientSession()
-    sem = asyncio.Semaphore(10)
+    sem = asyncio.Semaphore(25)
 
     board_extractor = BoardExtractor()
     catalog_extractor = CatalogExtractor()
@@ -27,8 +24,7 @@ async def main():
 
     board_transformer = BoardTransformer()
     catalog_transformer = CatalogTransformer()
-    file_transformer = FileTransfomer()
-    thread_transformer = ThreadTransformer(file_transformer)
+    thread_transformer = ThreadTransformer()
 
     board_loader = BoardLoader(connection)
     thread_loader = ThreadLoader(connection)
@@ -37,37 +33,22 @@ async def main():
     boards = board_transformer.transform_board_list(raw_boards)
     board_loader.bulk_load(boards)
 
-    executor = concurrent.futures.ProcessPoolExecutor()
     total_amount = len(boards)
     current = 1
-    futures = []
 
+    t1 = time.time()
     for board in boards:
         print(f"Scraping /{board.board_name}/ - {current}/{total_amount}")
         current += 1
-
-        if board.board_name == 'f':
-            # it crashes. Probably something to do with the filetype, haven't
-            # really looked into it yet.
-            continue
 
         raw_catalog = catalog_extractor.extract_catalog(board)
         catalog = catalog_transformer.transform_catalog(board, raw_catalog)
 
         raw_threads = await thread_extractor.generate_extraction_tasks(board, catalog)
+        thread_transformer.transform_threads_sequentially(catalog, raw_threads)
 
-        for i in range(0, len(catalog)):
-            futures.append(executor.submit(thread_transformer.transform_thread, catalog[i], raw_threads[i]))
+        thread_loader.bulk_load(catalog)
 
-        concurrent.futures.wait(futures)
-
-        results = [future.result() for future in futures]
-
-        thread_loader.bulk_load(results)
-
-        futures.clear()
-
-    executor.shutdown(wait=True)
     await session.close()
 
 if __name__=='__main__':

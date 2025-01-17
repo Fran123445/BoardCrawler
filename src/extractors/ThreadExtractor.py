@@ -10,11 +10,11 @@ class ThreadExtractor:
         self.semaphore = semaphore
 
     async def extract_thread(self, board: Board, thread: Thread):
-        url = f"https://boards.4chan.org/{board.board_name}/thread/{thread.thread_number}/"
+        url = f"https://a.4cdn.org/{board.board_name}/thread/{thread.thread_number}.json"
 
         async with self.semaphore:
             async with self.session.get(url) as response:
-                return await response.text(errors='replace')
+                return await response.json()
 
     async def generate_extraction_tasks(self, board: Board, catalogue: list):
         tasks = []
